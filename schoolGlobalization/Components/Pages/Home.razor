@@ -1,0 +1,94 @@
+﻿@page "/"
+@using System.Globalization
+@using Microsoft.Extensions.Localization
+@using schoolGlobalization.Resources
+@inject IStringLocalizer<SharedResource> Loc
+
+<PageTitle>@Loc["Home"]</PageTitle>
+
+<div class="container py-4">
+    <h1 class="display-4 mb-4">
+        @Loc["Welcome"]
+    </h1>
+
+    <div class="row g-4">
+        <!-- Culture Info Card -->
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="card-title h4 mb-3">@Loc["CS"]</h2>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item bg-transparent">
+                            <small class="text-muted">@Loc["CurrentCultureLabel"]:</small>
+                            <div>@CultureInfo.CurrentCulture</div>
+                        </div>
+                        <div class="list-group-item bg-transparent">
+                            <small class="text-muted">@Loc["CurrentUICultureLabel"]:</small>
+                            <div>@CultureInfo.CurrentUICulture</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rendered Values Card -->
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="card-title h4 mb-3">@Loc["RV"]</h2>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item bg-transparent">
+                            <small class="text-muted">@Loc["DateLabel"]:</small>
+                            <div>@dt</div>
+                        </div>
+                        <div class="list-group-item bg-transparent">
+                            <small class="text-muted">@Loc["NumberLabel"]:</small>
+                            <div>@number.ToString("N2")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Without Type Card -->
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="card-title h4">@Loc["StandardInputs"]</h2>
+                    <p class="card-subtitle mb-3 text-muted small">@Loc["UsingCurrentCulture"]</p>
+                    <div class="mb-3">
+                        <label class="form-label">@Loc["DateLabel"]:</label>
+                        <input @bind="dt" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@Loc["NumberLabel"]:</label>
+                        <input @bind="number" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input With Type Card -->
+        <div class="col-12 col-md-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="card-title h4">@Loc["TypedInputs"]</h2>
+                    <p class="card-subtitle mb-3 text-muted small">@Loc["UsingInvariantCulture"]</p>
+                    <div class="mb-3">
+                        <label class="form-label">@Loc["DateLabel"]:</label>
+                        <input type="date" @bind="dt" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">@Loc["NumberLabel"]:</label>
+                        <input type="number" @bind="number" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DateTime dt = DateTime.Now;
+    private double number = 1999.69;
+}

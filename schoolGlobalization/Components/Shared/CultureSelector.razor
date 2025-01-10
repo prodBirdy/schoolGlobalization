@@ -1,0 +1,60 @@
+@using System.Globalization
+@using schoolGlobalization.Resources
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> Loc
+
+<div class="position-fixed bottom-0 end-0 m-3">
+    <div class="card shadow-sm">
+        <div class="card-body p-2">
+            <label class="d-flex align-items-center gap-2 mb-0">
+                <span class="text-muted small">
+                    @Loc["SelectLanguage"]
+                </span>
+                <select @bind="selectedCulture" 
+                        @bind:after="ApplySelectedCultureAsync"
+                        class="form-select form-select-sm">
+                    @foreach (var culture in supportedCultures)
+                    {
+                        <option value="@culture">@culture.NativeName + @culture.DisplayName </option>
+                    }
+                </select>
+            </label>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private CultureInfo[] supportedCultures = new[]
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("de-DE"),
+        new CultureInfo("de-AT"),
+        new CultureInfo("fr-FR"),
+        new CultureInfo("ar-SA")
+        
+    };
+
+    private CultureInfo? selectedCulture;
+
+    protected override void OnInitialized()
+    {
+        selectedCulture = CultureInfo.CurrentCulture;
+    }
+
+    private async Task ApplySelectedCultureAsync()
+    {
+        if (CultureInfo.CurrentCulture != selectedCulture)
+        {
+            var uri = new Uri(Navigation.Uri)
+                .GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+            var cultureEscaped = Uri.EscapeDataString(selectedCulture.Name);
+            var uriEscaped = Uri.EscapeDataString(uri);
+
+            Navigation.NavigateTo(
+                $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
+                forceLoad: true);
+        }
+    }
+}
